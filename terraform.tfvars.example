@@ -1,0 +1,4 @@
+konnect_pat             = "YOUR_KONNECT_PERSONAL_ACCESS_TOKEN"
+kubeconfig_path         = "~/.kube/config"
+dp_client_cert_path     = "path/to/your/tls.crt"
+dp_client_key_path      = "path/to/your/tls.key"

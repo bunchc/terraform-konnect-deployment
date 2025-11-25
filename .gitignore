@@ -1,0 +1,13 @@
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+terraform.tfvars
+
+# Sensitive files
+*tls.crt
+*tls.key
+
+# Context portal
+context_portal/
