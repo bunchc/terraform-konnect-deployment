@@ -1,3 +1,9 @@
+resource "kubernetes_namespace" "example" {
+  metadata {
+    name = var.kubernetes_namespace
+  }
+}
+
 resource "kubernetes_secret" "dp_tls_secret" {
   metadata {
     name      = "kong-dp-client-mtls"
