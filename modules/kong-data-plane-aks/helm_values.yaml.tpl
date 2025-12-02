@@ -1,17 +1,43 @@
 # helm_values.yaml
-env:
-  KONG_ROLE: "data_plane"
-  KONG_DATABASE: "off"
-  KONG_CLUSTER_CERT: "/etc/secrets/kong-dp-client-mtls/tls.crt"
-  KONG_CLUSTER_CERT_KEY: "/etc/secrets/kong-dp-client-mtls/tls.key"
-  KONG_KONNECT_MODE: "on"
-  KONG_KONNECT_CONTROL_PLANE_ID: "${konnect_control_plane_id}"
-  KONG_KONNECT_TLS_CLIENT_CERT_FILE: "/etc/secrets/kong-dp-client-mtls/tls.crt"
-  KONG_KONNECT_TLS_CLIENT_KEY_FILE: "/etc/secrets/kong-dp-client-mtls/tls.key"
+image:
+  repository: kong/kong-gateway
+  tag: "3.12"
 
 secretVolumes:
-  - kong-dp-client-mtls
+- kong-cluster-cert
+
+admin:
+  enabled: false
+
+env:
+  role: data_plane
+  database: "off"
+  cluster_mtls: pki
+  cluster_control_plane: ${konnect_control_plane_id}.us.cp.konghq.com:443
+  cluster_dp_labels: "type:docker-kubernetesOS"
+  cluster_server_name: ${konnect_control_plane_id}.us.cp.konghq.com
+  cluster_telemetry_endpoint: ${konnect_control_plane_id}.us.tp.konghq.com:443
+  cluster_telemetry_server_name: ${konnect_control_plane_id}.us.tp.konghq.com
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+  lua_ssl_trusted_certificate: system
+  konnect_mode: "on"
+  vitals: "off"
+  nginx_worker_processes: "1"
+  upstream_keepalive_max_requests: "100000"
+  nginx_http_keepalive_requests: "100000"
+  proxy_access_log: "off"
+  dns_stale_ttl: "3600"
+  router_flavor: expressions
 
 ingressController:
-  enabled: true
+  enabled: false
   installCRDs: false
+
+resources:
+  requests:
+    cpu: 1
+    memory: "2Gi"
+
+manager:
+  enabled: false
